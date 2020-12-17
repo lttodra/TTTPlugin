@@ -1,0 +1,6 @@
+name: TTT
+version: ${project.version}
+main: de.lttodra.ttt.main.Main
+api-version: 1.16
+authors: [ LtTodra ]
+description: A TTT Plugin for Spigot
