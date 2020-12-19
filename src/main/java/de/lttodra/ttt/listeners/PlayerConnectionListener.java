@@ -1,5 +1,6 @@
 package de.lttodra.ttt.listeners;
 
+import de.lttodra.ttt.countdowns.LobbyCountdown;
 import de.lttodra.ttt.gamestates.LobbyState;
 import de.lttodra.ttt.main.Main;
 import org.bukkit.entity.Player;
@@ -26,8 +27,13 @@ public class PlayerConnectionListener implements Listener {
         event.setJoinMessage(Main.PREFIX + "§a" + player.getDisplayName() + "§7has joined the game. [" +
                 plugin.getPlayers().size() + "/" + LobbyState.MAX_PLAYERS + "]");
 
+        LobbyState lobbyState = (LobbyState) plugin.getGameStateManager().getCurrentGameState();
+        LobbyCountdown countdown = lobbyState.getCountdown();
         if (plugin.getPlayers().size() >= LobbyState.MIN_PLAYERS) {
-            //TODO Start Game
+            if (!countdown.isRunning()) {
+                countdown.stopIdle();
+                countdown.start();
+            }
         }
     }
 
@@ -40,6 +46,15 @@ public class PlayerConnectionListener implements Listener {
         plugin.getPlayers().remove(player);
         event.setQuitMessage(Main.PREFIX + "§c" + player.getDisplayName() + "§7has left the game. [" +
                 plugin.getPlayers().size() + "/" + LobbyState.MAX_PLAYERS + "]");
+
+        LobbyState lobbyState = (LobbyState) plugin.getGameStateManager().getCurrentGameState();
+        LobbyCountdown countdown = lobbyState.getCountdown();
+        if (plugin.getPlayers().size() < LobbyState.MIN_PLAYERS) {
+            if (countdown.isRunning()) {
+                countdown.stop();
+                countdown.startIdle();
+            }
+        }
 
     }
 }
