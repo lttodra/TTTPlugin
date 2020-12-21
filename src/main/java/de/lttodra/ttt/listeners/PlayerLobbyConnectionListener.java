@@ -3,17 +3,19 @@ package de.lttodra.ttt.listeners;
 import de.lttodra.ttt.countdowns.LobbyCountdown;
 import de.lttodra.ttt.gamestates.LobbyState;
 import de.lttodra.ttt.main.Main;
+import de.lttodra.ttt.util.ConfigLocationUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-public class PlayerConnectionListener implements Listener {
+public class PlayerLobbyConnectionListener implements Listener {
 
     private Main plugin;
 
-    public PlayerConnectionListener(Main plugin) {
+    public PlayerLobbyConnectionListener(Main plugin) {
         this.plugin = plugin;
     }
 
@@ -26,6 +28,13 @@ public class PlayerConnectionListener implements Listener {
         plugin.getPlayers().add(player);
         event.setJoinMessage(Main.PREFIX + "§a" + player.getDisplayName() + "§7has joined the game. [" +
                 plugin.getPlayers().size() + "/" + LobbyState.MAX_PLAYERS + "]");
+
+        ConfigLocationUtil locationUtil = new ConfigLocationUtil(plugin, "Lobby");
+        if (locationUtil.loadLocation() != null) {
+            player.teleport(locationUtil.loadLocation());
+        } else {
+            Bukkit.getConsoleSender().sendMessage("§cThe lobby Location wasn't set yet!");
+        }
 
         LobbyState lobbyState = (LobbyState) plugin.getGameStateManager().getCurrentGameState();
         LobbyCountdown countdown = lobbyState.getCountdown();

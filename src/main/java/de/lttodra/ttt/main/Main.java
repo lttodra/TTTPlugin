@@ -1,8 +1,9 @@
 package de.lttodra.ttt.main;
 
+import de.lttodra.ttt.commands.SetupCommand;
 import de.lttodra.ttt.gamestates.GameState;
 import de.lttodra.ttt.gamestates.GameStateManager;
-import de.lttodra.ttt.listeners.PlayerConnectionListener;
+import de.lttodra.ttt.listeners.PlayerLobbyConnectionListener;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
@@ -12,7 +13,8 @@ import java.util.ArrayList;
 
 public final class Main extends JavaPlugin {
 
-    public static final String PREFIX = "§7[§cTTT§7] §r";
+    public static final String PREFIX = "§7[§cTTT§7] §r",
+            NO_PERMISSION = PREFIX + "§cYou have no Permission!";
 
     private GameStateManager gameStateManager;
     private ArrayList<Player> players;
@@ -29,7 +31,9 @@ public final class Main extends JavaPlugin {
     }
 
     private void init(PluginManager pluginManager) {
-        pluginManager.registerEvents(new PlayerConnectionListener(this), this);
+        getCommand("setup").setExecutor(new SetupCommand(this));
+
+        pluginManager.registerEvents(new PlayerLobbyConnectionListener(this), this);
     }
 
     @Override
