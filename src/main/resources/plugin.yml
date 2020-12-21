@@ -8,3 +8,5 @@ description: A TTT Plugin for Spigot
 commands:
    setup:
      description: Set some settings!
+   start:
+     description: Starts the game!

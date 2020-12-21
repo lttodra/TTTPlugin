@@ -1,6 +1,7 @@
 package de.lttodra.ttt.main;
 
 import de.lttodra.ttt.commands.SetupCommand;
+import de.lttodra.ttt.commands.StartCommand;
 import de.lttodra.ttt.gamestates.GameState;
 import de.lttodra.ttt.gamestates.GameStateManager;
 import de.lttodra.ttt.listeners.PlayerLobbyConnectionListener;
@@ -32,6 +33,7 @@ public final class Main extends JavaPlugin {
 
     private void init(PluginManager pluginManager) {
         getCommand("setup").setExecutor(new SetupCommand(this));
+        getCommand("start").setExecutor(new StartCommand(this));
 
         pluginManager.registerEvents(new PlayerLobbyConnectionListener(this), this);
     }
